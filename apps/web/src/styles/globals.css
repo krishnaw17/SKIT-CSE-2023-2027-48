@@ -1,0 +1,227 @@
+/* =============================================================================
+   GLMS Global Stylesheet
+   Design System: Outfit + Plus Jakarta Sans + Space Grotesk
+   Color System: Monochrome Dark (#09090B primary)
+   ============================================================================= */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =============================================================================
+   CSS Custom Properties
+   ============================================================================= */
+
+:root {
+  /* Color tokens */
+  --color-bg: #ffffff;
+  --color-surface: #f8fafc;
+  --color-primary: #09090B;
+  --color-primary-hover: #27272A;
+  --color-text: #111827;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+
+  /* Typography */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-number: 'Space Grotesk', sans-serif;
+  --font-code: 'JetBrains Mono', monospace;
+
+  /* Spacing & radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Shadows */
+  --shadow-soft: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.04);
+  --shadow-elevated: 0 10px 15px -3px rgb(0 0 0 / 0.06), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+
+  /* Transitions */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-normal: 0.3s;
+  --duration-slow: 0.6s;
+}
+
+/* =============================================================================
+   Base Layer
+   ============================================================================= */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+    color: var(--color-text);
+  }
+
+  h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+  h2 { font-size: clamp(1.5rem, 3.5vw, 2.5rem); }
+  h3 { font-size: clamp(1.25rem, 2.5vw, 1.875rem); }
+  h4 { font-size: 1.25rem; }
+
+  p { line-height: 1.7; }
+
+  /* Focus ring */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: #27272a;
+    color: #fafafa;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+}
+
+/* =============================================================================
+   Component Layer
+   ============================================================================= */
+
+@layer components {
+
+  /* Card — base elevated surface */
+  .card {
+    @apply bg-white rounded-xl border border-border shadow-card p-6;
+  }
+
+  /* Badge chip */
+  .badge-chip {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+
+  /* Stat number — uses Space Grotesk */
+  .stat-number {
+    font-family: var(--font-number);
+    @apply text-4xl font-bold tracking-tight;
+  }
+
+  /* Gradient text — primary brand */
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-400;
+  }
+
+  /* Page shell */
+  .page-wrapper {
+    @apply min-h-screen bg-surface;
+  }
+
+  .page-container {
+    @apply max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8;
+  }
+
+  /* Section heading */
+  .section-heading {
+    font-family: var(--font-heading);
+    @apply text-sm font-semibold tracking-widest uppercase text-ink-muted;
+  }
+
+  /* Shimmer skeleton */
+  .skeleton {
+    @apply bg-gradient-to-r from-surface via-border to-surface bg-[length:200%_100%] animate-shimmer rounded-lg;
+  }
+
+  /* Input — consistent across forms */
+  .input-base {
+    @apply w-full h-10 px-3 text-sm rounded-lg border border-border bg-white
+           text-ink placeholder:text-ink-light
+           focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary
+           disabled:opacity-50 disabled:cursor-not-allowed
+           transition-all duration-200;
+  }
+
+  /* XP bar */
+  .xp-bar {
+    @apply h-2 rounded-full bg-surface overflow-hidden;
+  }
+
+  .xp-bar-fill {
+    @apply h-full rounded-full bg-gradient-to-r from-primary-500 to-primary-400
+           transition-all duration-700 ease-out-expo;
+  }
+}
+
+/* =============================================================================
+   Utility Layer
+   ============================================================================= */
+
+@layer utilities {
+  .font-heading { font-family: var(--font-heading); }
+  .font-number  { font-family: var(--font-number); }
+  .font-code    { font-family: var(--font-code); }
+
+  /* GSAP initial states */
+  .will-animate {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  /* Glassmorphism (used sparingly) */
+  .glass {
+    @apply backdrop-blur-md bg-white/70 border border-white/30;
+  }
+
+  /* Focus ring via Tailwind */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30
+           focus-visible:ring-offset-2;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Truncate at N lines */
+  .line-clamp-2 { -webkit-line-clamp: 2; }
+  .line-clamp-3 { -webkit-line-clamp: 3; }
+}
+
+/* =============================================================================
+   GSAP animation classes (set by JS)
+   ============================================================================= */
+
+.gsap-reveal {
+  opacity: 0;
+  will-change: transform, opacity;
+}
