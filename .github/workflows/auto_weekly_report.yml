@@ -48,5 +48,14 @@ jobs:
           else
             git commit -m "docs: archive Form-3 weekly progress report [skip ci]"
             git pull --rebase origin main
-            git push
+            for attempt in 1 2 3; do
+              if git push; then
+                break
+              fi
+              if [ "$attempt" -eq 3 ]; then
+                echo "Push failed after 3 attempts."
+                exit 1
+              fi
+              git pull --rebase origin main
+            done
           fi
