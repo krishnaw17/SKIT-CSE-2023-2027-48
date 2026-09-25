@@ -47,5 +47,6 @@ jobs:
             echo "No new reports to commit."
           else
             git commit -m "docs: archive Form-3 weekly progress report [skip ci]"
+            git pull --rebase origin main
             git push
           fi
