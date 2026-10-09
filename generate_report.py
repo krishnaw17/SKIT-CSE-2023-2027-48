@@ -111,15 +111,14 @@ def get_git_metrics(interval="weekly", target_date_str=None):
 
             # --- NORMALIZE STUDENT AUTHORS ---
             clean_author = author.strip()
-            if "manishkumar" in clean_author.lower() or clean_author == "Manish Kumar":
-                clean_author = "Manish Kumar"
-            elif "manish regar" in clean_author.lower() or clean_author == "Manish Regar":
-                clean_author = "Manish Regar"
+            if "krishnawadhwa" in clean_author.lower() or clean_author == "Krishna Wadhwa":
+                clean_author = "Krishna Wadhwa"
+            elif "kshitij mathur" in clean_author.lower() or clean_author == "Kshitij Mathur":
+                clean_author = "Kshitij Mathur"
             elif "kunal" in clean_author.lower():
-                clean_author = "Kunal Saukhiya"
-            elif "rishabh" in clean_author.lower():
-                clean_author = "Rishabh Jain"
-
+                clean_author = "Kunal Arya"
+            elif "lakshay" in clean_author.lower():
+                clean_author = "Lakshay Pareek"
             current_author = clean_author
             current_date_str = date_str
 
