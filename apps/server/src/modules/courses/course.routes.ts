@@ -9,6 +9,7 @@ import {
   updateCourseBodySchema,
   courseIdParamSchema,
   enrollmentIdParamSchema,
+  courseQuerySchema,
 } from './course.schema';
 import { lessonRouter } from '../lessons/lesson.routes';
 import { assignmentRouter } from '../assignments/assignment.routes';
@@ -17,75 +18,13 @@ import { quizRouter } from '../quizzes/quiz.routes';
 const router: IRouter = Router();
 const controller = new CourseController();
 
-router.get('/debug-all', async (req, res) => {
-  const { prisma } = require('../../config/database');
-  const course = await prisma.course.findUnique({ where: { id: "cmsymu5az0005skihfql4a02h" } });
-  const teacherId = course?.teacherId;
-  const profile = await prisma.teacherProfile.findUnique({ where: { id: teacherId } });
-  
-  const coursesCount = await prisma.course.count({
-    where: { teacherId: profile?.id, isPublished: true }
-  });
-  
-  const enrollmentsCount = await prisma.enrollment.findMany({
-    where: { course: { teacherId: profile?.id } },
-    select: { studentId: true },
-    distinct: ['studentId']
-  });
-
-  const rawCourses = await prisma.course.findMany({
-    where: { teacherId: profile?.id }
-  });
-
-  res.json({ 
-    coursesCount, 
-    enrollmentsLength: enrollmentsCount.length, 
-    profileId: profile?.id, 
-    profileUserId: profile?.userId,
-    rawCourses
-  });
-});
-
-router.get('/debug-dashboard', async (req, res) => {
-  const { prisma } = require('../../config/database');
-  const userId = "cmsiwiyjs00005fni3b3qbesn";
-  const profile = await prisma.teacherProfile.findUnique({ where: { userId } });
-  
-  const coursesCount = await prisma.course.count({
-    where: { teacherId: profile?.id, isPublished: true }
-  });
-
-  const uniqueStudents = await prisma.enrollment.findMany({
-    where: { course: { teacherId: profile?.id } },
-    select: { studentId: true },
-    distinct: ['studentId']
-  });
-
-  const pendingGrading = await prisma.assignmentSubmission.count({
-    where: {
-      assignment: { course: { teacherId: profile?.id } },
-      status: 'SUBMITTED',
-      score: null
-    }
-  });
-
-  res.json({
-    stats: {
-      coursesCount,
-      studentsCount: uniqueStudents.length,
-      pendingGrading,
-    },
-    profileId: profile?.id
-  });
-});
-
 router.use(authenticate);
 
 // Public (to authenticated users)
 router.use('/:courseId/lessons', lessonRouter);
 router.use('/:courseId/assignments', assignmentRouter);
 router.use('/:courseId/quizzes', quizRouter);
-router.get('/', controller.getAllCourses);
+router.get('/', validate({ query: courseQuerySchema }), controller.getAllCourses);
 router.get('/:id', validate({ params: courseIdParamSchema }), controller.getCourseById);
 
 // Student Enrollments
