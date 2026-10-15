@@ -36,3 +36,21 @@ export const enrollmentIdParamSchema = z.object({
   courseId: z.string().cuid(),
   studentId: z.string().cuid(),
 });
+
+export const courseQuerySchema = z.object({
+  subjectId: z.string().cuid().optional(),
+  teacherId: z.string().optional(),
+  isPublished: z
+    .enum(['true', 'false'])
+    .transform((val) => val === 'true')
+    .optional(),
+  search: z.string().optional(),
+  page: z
+    .string()
+    .optional()
+    .transform((val) => (val ? Math.max(1, parseInt(val, 10)) : 1)),
+  limit: z
+    .string()
+    .optional()
+    .transform((val) => (val ? Math.min(100, Math.max(1, parseInt(val, 10))) : 20)),
+});

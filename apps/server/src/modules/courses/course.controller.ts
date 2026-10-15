@@ -29,8 +29,7 @@ export class CourseController {
   }
 
   async getAllCourses(req: Request, res: Response) {
-    const subjectId = req.query['subjectId'] as string | undefined;
-    const teacherId = req.query['teacherId'] as string | undefined;
+    const { subjectId, teacherId, search, isPublished, page, limit } = (req.query as any) || {};
 
     const query: Prisma.CourseWhereInput = {};
     if (subjectId) query.subjectId = subjectId;
@@ -40,7 +39,19 @@ export class CourseController {
 
     if (req.user?.role === 'STUDENT') {
       query.isPublished = true;
+    } else if (isPublished !== undefined) {
+      query.isPublished = isPublished;
     }
+
+    if (search) {
+      query.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    const take = limit ? Number(limit) : 20;
+    const skip = page ? (Number(page) - 1) * take : 0;
 
     const courses = await prisma.course.findMany({
       where: query,
@@ -50,6 +61,8 @@ export class CourseController {
         _count: { select: { enrollments: true, lessons: true } },
       },
       orderBy: { createdAt: 'desc' },
+      skip,
+      take,
     });
 
     let resultCourses = courses as any[];
