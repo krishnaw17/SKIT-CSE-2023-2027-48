@@ -97,7 +97,14 @@ export class CourseController {
         subject: true,
         teacher: { include: { user: { select: { email: true, isActive: true } } } },
         lessons: { orderBy: { order: 'asc' } },
-        _count: { select: { enrollments: true } },
+        _count: {
+          select: {
+            enrollments: true,
+            lessons: true,
+            quizzes: { where: { status: 'PUBLISHED' } },
+            assignments: { where: { status: 'PUBLISHED' } },
+          },
+        },
       },
     });
 
