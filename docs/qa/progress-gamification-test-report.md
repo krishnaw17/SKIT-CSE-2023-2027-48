@@ -4,8 +4,8 @@
 **Sprint:** Role Based Authentication & dashboard, Module Integration, Bug fixes, Optimization  
 **Member:** Kunal Arya  
 **Role:** QA Engineer · Testing · Documentation  
-**Period:** 07-Oct-2026 → 15-Oct-2026 (Transition & Kick-Off Phase)  
-**Status:** Completed  
+**Period:** 16-Oct-2026 → 22-Oct-2026 (Deep Verification & API Testing Phase)  
+**Status:** Completed & Verified  
 
 ---
 
@@ -15,10 +15,11 @@
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | Progress Tracking QA | 6 | 6 | 0 | 0 | 0 | 100% |
 | XP Engine & Milestones | 7 | 7 | 0 | 0 | 0 | 100% |
-| Badges & Achievements | 6 | 5 | 1 | 0 | 0 | 83.3% |
+| Badges & Achievements | 6 | 6 | 0 | 0 | 0 | 100% |
 | Leaderboard Rankings | 7 | 7 | 0 | 0 | 0 | 100% |
-| Edge Cases & Resilience | 5 | 4 | 0 | 1 | 0 | 80% |
-| **Total** | **31** | **29** | **1** | **1** | **0** | **93.5%** |
+| Backend API & Resilience | 8 | 8 | 0 | 0 | 0 | 100% |
+| Edge Cases & Resilience | 5 | 3 | 0 | 2 | 0 | 60% |
+| **Total** | **39** | **37** | **0** | **2** | **0** | **94.9%** |
 
 ---
 
@@ -28,10 +29,10 @@
 | :--- | :--- |
 | **Frontend URL** | `http://localhost:5173` |
 | **Backend URL** | `http://localhost:3000` |
-| **Module Scope** | Progress Completion Engine, XP Accrual, Badge Unlocking, Leaderboard Table |
+| **Module Scope** | Progress Completion Engine, XP Accrual, Badge Unlocking, Leaderboard Table, REST API Endpoints |
 | **Browser** | Google Chrome 129.0 / Chromium headless |
 | **Tester** | Kunal Arya (QA Engineer) |
-| **Execution Period** | 07-Oct-2026 to 15-Oct-2026 |
+| **Execution Period** | 16-Oct-2026 to 22-Oct-2026 |
 | **Target Branch** | `kunalarya` |
 
 ---
@@ -65,7 +66,7 @@
 
 ---
 
-### 3. Badges & Achievements
+### 3. Badges & Achievements (Retested)
 
 | ID | Test Case | Result | Bug Ref | Notes |
 | :--- | :--- | :---: | :---: | :--- |
@@ -74,7 +75,7 @@
 | BDG-03 | Badge visual states | ✅ Pass | — | Unlocked badges are colored; locked are grayscale |
 | BDG-04 | Badge metadata inspection | ✅ Pass | — | Hover card displays badge name and unlock date |
 | BDG-05 | Admin badge assignment | ✅ Pass | — | Assigned badge immediately appears in student view |
-| BDG-06 | Badge count synchronization | ❌ Fail | BUG-GAM-01 | Header count lags by 1 until manual page reload |
+| BDG-06 | Badge count synchronization | ✅ Pass | BUG-GAM-01 | **Retested & Verified:** Header count now syncs immediately |
 
 ---
 
@@ -92,26 +93,39 @@
 
 ---
 
-### 5. Edge Cases & Resilience
+### 5. Backend API & Resilience (New)
+
+| ID | Test Case | Result | Bug Ref | Notes |
+| :--- | :--- | :---: | :---: | :--- |
+| API-01 | Fetch student XP profile | ✅ Pass | — | Returns accurate current XP and level bounds |
+| API-02 | Award lesson complete XP | ✅ Pass | — | +50 XP increments total atomicity verified |
+| API-03 | Level-up trigger event | ✅ Pass | — | LeveledUp boolean set; Level 2 unlocked |
+| API-04 | Duplicate XP event guard | ✅ Pass | — | HTTP 409 Conflict returned; prevents XP farming |
+| API-05 | Badges catalog query | ✅ Pass | — | Earned vs locked arrays returned cleanly |
+| API-06 | Leaderboard sort & pagination | ✅ Pass | — | Paginated 10 per page sorted descending |
+| API-07 | Unauthorized API access | ✅ Pass | — | HTTP 401 Unauthorized returned on missing token |
+| API-08 | Query response latency SLA | ✅ Pass | — | Average turnaround 152ms (Target: <400ms) |
+
+---
+
+### 6. Edge Cases & Resilience
 
 | ID | Test Case | Result | Bug Ref | Notes |
 | :--- | :--- | :---: | :---: | :--- |
 | EC-01 | Rapid concurrent XP events | ✅ Pass | — | Mutex/atomic transactions prevent duplicate XP credits |
 | EC-02 | Max level boundary | ✅ Pass | — | Level capped smoothly with progress bar pinned |
 | EC-03 | Negative XP guard | ✅ Pass | — | XP lower bound clamped at 0 floor |
-| EC-04 | Offline XP sync attempt | ⚠️ Blocked | BUG-GAM-02 | Client requires active network to sync XP; worker pending |
+| EC-04 | Offline XP sync attempt | ⚠️ Blocked | BUG-GAM-02 | Offline background sync worker deferred to next phase |
 | EC-05 | Leaderboard pagination | ✅ Pass | — | 100+ rows paginate smoothly without UI freeze |
 
 ---
 
-## 4. Defect & Observation Log
+## 4. Defect Tracking & Verification Log
 
 | Defect ID | Test Ref | Description | Severity | Target Module | Status |
 | :--- | :--- | :--- | :---: | :--- | :---: |
-| **BUG-GAM-01** | BDG-06 | Student dashboard badge counter is cached and requires hard reload to reflect newly unlocked badge. | Low | Web Student Store | Open |
+| **BUG-GAM-01** | BDG-06 | Student dashboard badge counter is cached and requires hard reload to reflect newly unlocked badge. | Low | Web Student Store | **Resolved & Verified (20-Oct)** |
 | **BUG-GAM-02** | EC-04 | Offline XP event queueing is not yet supported; offline actions prompt a network warning. | Medium | Client Sync Handler | Open (Deferred) |
-
-> **Severity Scale:** Critical (Blocker), High (Major feature defect), Medium (Functional workaround exists), Low (Minor UX/Cosmetic).
 
 ---
 
@@ -119,13 +133,13 @@
 
 | Item | Details |
 | :--- | :--- |
-| **Total Test Cases** | 31 |
-| **Passed** | 29 (93.5%) |
-| **Failed (Minor)** | 1 (Low severity cache lag) |
-| **Blocked / Deferred** | 1 (Offline worker queue) |
-| **Overall Recommendation** | **ACCEPTED FOR SPRINT REVIEW** — Core gamification mechanics (XP accrual, leveling, badges, and leaderboard rankings) are operating accurately and reliably. |
+| **Total Test Cases** | 39 |
+| **Passed** | 37 (94.9%) |
+| **Failed (Active)** | 0 |
+| **Blocked / Deferred** | 2 (Offline caching infrastructure) |
+| **Overall Recommendation** | **ACCEPTED FOR SPRINT REVIEW** — Progress, XP, Badges, and Leaderboard modules have passed rigorous UI and API validation with high reliability. |
 | **QA Engineer** | Kunal Arya |
-| **Sign-Off Date** | 15-Oct-2026 |
+| **Sign-Off Date** | 22-Oct-2026 |
 
 ---
 
